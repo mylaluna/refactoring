@@ -24,15 +24,7 @@ export default function createStatementData(invoice, plays) {
     result.volumeCredits = calculator.volumeCredits;
     return result;
   }
-
-  function volumeCreditsFor(aPerformance) {
-    return new PerformanceCalculator(aPerformance, playFor(aPerformance)).volumeCredits;
-  }
-
-  function amountFor(aPerformance) {
-    return new PerformanceCalculator(aPerformance, playFor(aPerformance)).amount;
-  }
-
+  
   function playFor(aPerformance) {
     return plays[aPerformance.playID];
   }
@@ -45,7 +37,6 @@ function createPerformanceCalculator(aPerformance, aPlay) {
   default:
     throw new Error(`unknown type: ${aPlay.type}`)
   }
-  
 }
 
 class TragedyCalculator extends PerformanceCalculator {
@@ -62,7 +53,6 @@ class ComedyCalculator extends PerformanceCalculator {
   get volumeCredits() {
     return super.volumeCredits + Math.floor(this.performance.audience / 5);
   }
-  
   get amount() {
     let result = 30000;
     if (this.performance.audience > 20) {
@@ -78,11 +68,9 @@ class PerformanceCalculator {
     this.performance = aPerformance;
     this.play = aPlay;
   }
-
   get volumeCredits() {
     return Math.max(this.performance.audience - 30, 0);
   }
-
   get amount() {
     throw new Error('subclass responsibility');
   }
