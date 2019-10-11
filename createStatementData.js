@@ -1,14 +1,10 @@
-function statement (invoice, plays) {
-  return renderPlainText(createStatementData(invoice, plays));
-}
-
-function createStatementData(invoice, plays) {
-  const statementData = {};
-  statementData.customer = invoice.customer;
-  statementData.performances = invoice.performances.map(enrichPerformance);
-  statementData.totalAmount = totalAmount(statementData);
-  statementData.totalVolumeCredits = totalVolumeCredits(statementData);
-  return statementData;
+export default function createStatementData(invoice, plays) {
+  const result = {};
+  result.customer = invoice.customer;
+  result.performances = invoice.performances.map(enrichPerformance);
+  result.totalAmount = totalAmount(result);
+  result.totalVolumeCredits = totalVolumeCredits(result);
+  return result;
 
   function totalAmount(data) {
     return data.performances
@@ -59,21 +55,5 @@ function createStatementData(invoice, plays) {
 
   function playFor(aPerformance) {
     return plays[aPerformance.playID];
-  }
-}
-
-function renderPlainText (data) {
-  let result = `Statement for ${data.customer}\n`;
-  for (let perf of data.performances) {
-    result += `  ${perf.play.name}: ${usd(perf.amount)} (${perf.audience} seats)\n`;
-  }
-  result += `Amount owed is ${usd(data.totalAmount)}\n`;
-  result += `You earned ${data.totalVolumeCredits} credits\n`;
-  return result;
-
-  function usd(aNumber) {
-    return new Intl.NumberFormat("en-US",
-                        { style: "currency", currency: "USD",
-                          minimumFractionDigits: 2 }).format(aNumber/100);
   }
 }
